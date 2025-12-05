@@ -1,11 +1,6 @@
-user
-
-property
-
-amount
-
-paymentMethod
-
-paymentStatus
-
-createdAt
+// user
+// property
+// amount
+// paymentMethod
+// paymentStatus
+// createdAt

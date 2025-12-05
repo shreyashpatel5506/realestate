@@ -1,9 +1,26 @@
-user
+// user
+// agent
+// rating
+// comment
+// createdAt
+import { Mongoose, mongoose } from "mongoose"
+const RatingSchema = new Mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        require: true
+    },
+    Agent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        require: true
+    },
+    rating: {
+        type: Number,
+        require: true
+    }
+},
+    { timeStamp: true }
+)
 
-agent
-
-rating
-
-comment
-
-createdAt
+module.exports = mongoose.model('Rating', RatingSchema);
