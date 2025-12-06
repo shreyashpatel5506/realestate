@@ -19,5 +19,4 @@ const RatingSchema = new Mongoose.Schema({
     { timeStamp: true }
 )
 
-const Rating = mongoose.model("Booking", RatingSchema);
-export default Rating;
+export default mongoose.models.Rating || mongoose.model('Rating', RatingSchema);
