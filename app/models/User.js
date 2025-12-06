@@ -1,4 +1,4 @@
-const { Mongoose, Types } = require("mongoose");
+const { Mongoose, Types, default: mongoose } = require("mongoose");
 
 const User = Mongoose.Schema(
     {
@@ -7,7 +7,8 @@ const User = Mongoose.Schema(
             required: true
         },
         email: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Otp',
             required: true
         },
         phoneNumber: {
@@ -20,8 +21,9 @@ const User = Mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ["Agent", "Admin"],
-            required: true
+            enum: ["Agent", "User"],
+            required: true,
+            default: User
         }
     }, { timestamps: true }
 )

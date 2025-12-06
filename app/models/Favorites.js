@@ -9,7 +9,7 @@ const FavoritiesSchema = new mongoose.Schema({
     },
     property: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'propertySchema',
+        ref: 'Property',
         require: true
     }
 }, {
