@@ -26,7 +26,6 @@ export async function POST(req) {
             );
         }
 
-        // phone number must be numeric
         if (isNaN(phoneNumber)) {
             return NextResponse.json(
                 { success: false, message: "Phone number must be digits only" },
@@ -34,10 +33,8 @@ export async function POST(req) {
             );
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Save user in DB
         const newUser = await User.create({
             name,
             email: verifiedEmail,
@@ -46,14 +43,12 @@ export async function POST(req) {
             role,
         });
 
-        // Generate token
         const token = jwt.sign(
             { id: newUser._id, role: newUser.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
 
-        // Prepare response
         const response = NextResponse.json(
             {
                 success: true,
@@ -64,10 +59,18 @@ export async function POST(req) {
             { status: 200 }
         );
 
-        // Delete the OTP email cookie
+        // ⭐ Correct way to set cookie
+        response.cookies.set("token", token, {
+            httpOnly: true,
+            secure: true,
+            path: "/"
+        });
+
+        // delete OTP cookie
         response.cookies.delete("verifiedEmail");
 
         return response;
+
     } catch (error) {
         console.error("Register Error:", error);
 

@@ -17,7 +17,6 @@ export function middleware(req) {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // allow only agent
         if (decoded.role !== "agent") {
             return new NextResponse(
                 JSON.stringify({
@@ -28,7 +27,16 @@ export function middleware(req) {
             );
         }
 
-        return NextResponse.next();
+        // ⭐ Add agentId to headers
+        const requestHeaders = new Headers(req.headers);
+        requestHeaders.set("agentId", decoded.id);
+
+        // ⭐ MUST pass updated headers
+        return NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            },
+        });
 
     } catch (error) {
         return new NextResponse(

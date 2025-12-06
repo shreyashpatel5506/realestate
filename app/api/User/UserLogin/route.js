@@ -18,7 +18,6 @@ export async function POST(req) {
         }
 
         const user = await User.findOne({ email });
-
         if (!user) {
             return NextResponse.json({
                 success: false,
@@ -35,12 +34,13 @@ export async function POST(req) {
         }
 
         const token = jwt.sign(
-            { id: user._id, email: user.email },
+            { id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
 
-        return NextResponse.json({
+        // 👇 IMPORTANT FIX — CREATE RESPONSE FIRST
+        const response = NextResponse.json({
             success: true,
             message: "Login successful",
             token,
@@ -51,6 +51,16 @@ export async function POST(req) {
                 role: user.role
             }
         });
+
+        // 👇 NOW SET COOKIE
+        response.cookies.set("token", token, {
+            httpOnly: true,
+            secure: true,
+            path: "/",
+            maxAge: 7 * 24 * 60 * 60,
+        });
+
+        return response;
 
     } catch (error) {
         console.error("Login Error:", error);

@@ -1,45 +1,55 @@
 import connectMongo from "@/app/db";
 import { NextResponse } from "next/server";
-import cloudinary from "@/app/cloudinary";
+import cloudinary from "cloudinary";
 import Property from "@/app/models/Property";
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(req) {
     try {
         await connectMongo();
 
-        const body = await req.json();
-        const {
-            title,
-            description,
-            price,
-            type,
-            category,
-            address,
-            city,
-            state,
-            bedrooms,
-            bathrooms,
-            areaSqFt,
-            status,
-            images
-        } = body;
+        const formData = await req.formData();
 
-        if (!images || images.length === 0) {
-            return NextResponse.json(
-                { success: false, message: "Images are required!" },
-                { status: 400 }
-            );
-        }
+        const title = formData.get("title");
+        const description = formData.get("description");
+        const price = formData.get("price");
+        const type = formData.get("type");
+        const category = formData.get("category");
+        const address = formData.get("address");
+        const city = formData.get("city");
+        const state = formData.get("state");
+        const bedrooms = formData.get("bedrooms");
+        const bathrooms = formData.get("bathrooms");
+        const areaSqFt = formData.get("areaSqFt");
+        const status = formData.get("status");
+
+        const imageFiles = formData.getAll("images");
 
         const uploadedImages = await Promise.all(
-            images.map(async (img) => {
-                const uploadRes = await cloudinary.uploader.upload(img, {
+            imageFiles.map(async (file) => {
+                const buffer = Buffer.from(await file.arrayBuffer());
+                const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
+
+                const uploadRes = await cloudinary.uploader.upload(base64, {
                     folder: "properties",
                 });
+
                 return uploadRes.secure_url;
             })
         );
+        const agentId = req.headers.get("agentId");
 
+        if (!agentId) {
+            return NextResponse.json(
+                { success: false, message: "Agent ID missing from middleware" },
+                { status: 400 }
+            );
+        }
         const newProperty = await Property.create({
             title,
             description,
@@ -53,19 +63,20 @@ export async function POST(req) {
             bathrooms,
             areaSqFt,
             status,
+            Agent: agentId,
             images: uploadedImages,
         });
 
         return NextResponse.json({
             success: true,
             message: "Property created successfully!",
-            property: newProperty
+            newProperty,
         });
 
     } catch (error) {
         console.error("Create Property Error:", error);
         return NextResponse.json(
-            { success: false, message: "Error creating property" },
+            { success: false, message: error.message },
             { status: 500 }
         );
     }
