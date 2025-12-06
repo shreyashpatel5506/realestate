@@ -72,4 +72,5 @@ const propertySchema = new mongoose.Schema(
 
 
 
-export default mongoose.model('Property', propertySchema);
+const Property = mongoose.model("Property", propertySchema);
+export default Property;

@@ -23,6 +23,5 @@ const BookingSchema = new mongoose.Schema({
     },
 })
 
-
-
-export default mongoose.model('Booking', BookingSchema);
+const Booking = mongoose.model("Booking", BookingSchema);
+export default Booking;

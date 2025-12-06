@@ -16,5 +16,5 @@ const FavoritiesSchema = new mongoose.Schema({
     timestamps: true
 })
 
-
-export default mongoose.model('Favorities', FavoritiesSchema);
+const Favorities = mongoose.model("Favorities", FavoritiesSchema);
+export default Favorities;
