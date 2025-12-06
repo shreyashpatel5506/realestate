@@ -16,7 +16,7 @@ const UserSchema = mongoose.Schema(
         },
         password: {
             type: String,
-            require: true
+            required: true
         },
         role: {
             type: String,
@@ -26,5 +26,4 @@ const UserSchema = mongoose.Schema(
         }
     }, { timestamps: true }
 )
-const User = mongoose.model("User", UserSchema);
-export default User;
+export default mongoose.models.User || mongoose.model("User", UserSchema);
