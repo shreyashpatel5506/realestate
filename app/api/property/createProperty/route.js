@@ -21,7 +21,7 @@ export async function POST(req) {
             bathrooms,
             areaSqFt,
             status,
-            images   // array of base64 images or URLs
+            images
         } = body;
 
         if (!images || images.length === 0) {
@@ -31,17 +31,15 @@ export async function POST(req) {
             );
         }
 
-        // ⬆️ Upload all images to Cloudinary
         const uploadedImages = await Promise.all(
             images.map(async (img) => {
                 const uploadRes = await cloudinary.uploader.upload(img, {
                     folder: "properties",
                 });
-                return uploadRes.secure_url; // only return URL
+                return uploadRes.secure_url;
             })
         );
 
-        // ⬆️ Store property into MongoDB
         const newProperty = await Property.create({
             title,
             description,
