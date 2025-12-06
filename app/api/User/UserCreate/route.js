@@ -1,60 +1,79 @@
 import connectMongo from "@/app/db";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "@/app/models/User";
 
-const salt = bcrypt.genSaltSync(10);
-
-const generateToken = (user) => {
-    return jwt.sign(
-        { id: user._id, role: user.role },
-        process.env.JWT_SCERET,
-        { eexpiresIn: "7d" }
-    )
-}
-
-export default async function POST(req, res) {
+export async function POST(req) {
     try {
-        await connectMongo()
-        const { name, email, phoneNumber, role, password } = await req.json()
+        await connectMongo();
 
+        const { name, phoneNumber, role, password } = await req.json();
 
-        if (!name || !email || !phoneNumber || !role || !password) {
-            return NextResponse.json({
-                success: false,
-                message: "any feild is empty"
-            }, { status: 203 })
+        const verifiedEmail = req.cookies.get("verifiedEmail")?.value;
+
+        if (!name || !phoneNumber || !role || !password) {
+            return NextResponse.json(
+                { success: false, message: "All fields are required" },
+                { status: 400 }
+            );
         }
 
-        const hashedPassword = bcrypt.hash('password', salt);
-
-        if (phoneNumber.include(String)) {
-            return NextResponse.json({
-                success: false,
-                message: " Phone number is wrong"
-            }, { status: 203 })
+        if (!verifiedEmail) {
+            return NextResponse.json(
+                { success: false, message: "Email is not verified" },
+                { status: 403 }
+            );
         }
-        const newUser = {
+
+        // phone number must be numeric
+        if (isNaN(phoneNumber)) {
+            return NextResponse.json(
+                { success: false, message: "Phone number must be digits only" },
+                { status: 400 }
+            );
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Save user in DB
+        const newUser = await User.create({
             name,
-            email,
+            email: verifiedEmail,
             phoneNumber,
             password: hashedPassword,
-            role
-        }
-        const token = generateToken(newUser)
+            role,
+        });
 
-        const respone = {
-            success: true,
-            message: "User Created Succesfully",
-            newUser,
-            token
-        }
+        // Generate token
+        const token = jwt.sign(
+            { id: newUser._id, role: newUser.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
 
-        return NextResponse.json(respone, { status: 200 })
+        // Prepare response
+        const response = NextResponse.json(
+            {
+                success: true,
+                message: "User created successfully",
+                user: newUser,
+                token,
+            },
+            { status: 200 }
+        );
+
+        // Delete the OTP email cookie
+        response.cookies.delete("verifiedEmail");
+
+        return response;
     } catch (error) {
-        return NextResponse.json({
-            success: false,
-            message: "Error during to create a User",
+        console.error("Register Error:", error);
 
-        }, { status: 500 })
+        return NextResponse.json(
+            { success: false, message: "Error while creating user" },
+            { status: 500 }
+        );
     }
-
 }

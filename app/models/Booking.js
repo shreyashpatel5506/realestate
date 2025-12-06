@@ -1,13 +1,4 @@
-// user
 
-// property
-
-// visitDate
-
-// status
-// "pending" | "confirmed" | "cancelled"
-
-// createdAt
 import mongoose from "mongoose";
 
 const BookingSchema = new mongoose.Schema({
@@ -32,4 +23,6 @@ const BookingSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('Booking', BookingSchema);
+
+
+export default mongoose.model('Booking', BookingSchema);

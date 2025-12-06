@@ -1,8 +1,4 @@
-// user
-// agent
-// rating
-// comment
-// createdAt
+
 import { Mongoose, mongoose } from "mongoose"
 const RatingSchema = new Mongoose.Schema({
     user: {
@@ -23,4 +19,4 @@ const RatingSchema = new Mongoose.Schema({
     { timeStamp: true }
 )
 
-module.exports = mongoose.model('Rating', RatingSchema);
+export default mongoose.model('Rating', RatingSchema);

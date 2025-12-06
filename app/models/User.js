@@ -1,14 +1,13 @@
-const { Mongoose, Types, default: mongoose } = require("mongoose");
+import mongoose from "mongoose";
 
-const User = Mongoose.Schema(
+const UserSchema = mongoose.Schema(
     {
         name: {
             type: String,
             required: true
         },
         email: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Otp',
+            type: String,
             required: true
         },
         phoneNumber: {
@@ -21,11 +20,11 @@ const User = Mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ["Agent", "User"],
+            enum: ["agent", "user"],
             required: true,
-            default: User
+            default: "user"
         }
     }, { timestamps: true }
 )
 
-module.exports = Mongoose.model("User", User);
+export default mongoose.model("User", UserSchema);

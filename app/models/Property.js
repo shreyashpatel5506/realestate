@@ -70,4 +70,6 @@ const propertySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-module.exports = mongoose.model('Property', propertySchema);
+
+
+export default mongoose.model('Property', propertySchema);
