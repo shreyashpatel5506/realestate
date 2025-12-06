@@ -42,6 +42,7 @@ export async function POST(req) {
                 return uploadRes.secure_url;
             })
         );
+        console.log("🔥 AgentID received:", req.headers.get("agentId"));
         const agentId = req.headers.get("agentId");
 
         if (!agentId) {
