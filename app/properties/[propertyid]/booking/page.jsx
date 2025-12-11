@@ -95,7 +95,7 @@ export default function BookingPage() {
                         <button
                             onClick={() => {
                                 setShowModal(false);
-                                window.location.href = "/properties"; // 🔥 Redirect to properties page
+                                window.location.href = "/properties"; // 🔥 Redirect to properties     
                             }}
                             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700"
                         >
