@@ -73,7 +73,8 @@ export default function BookingListPage() {
                             <div className="mt-3 text-gray-700">
                                 <p>
                                     <span className="font-semibold">Visit Date: </span>
-                                    {item.visitDate}
+                                    {item.VisitDate ? new Date(item.VisitDate).toISOString().split("T")[0] : "N/A"}
+
                                 </p>
 
                                 <p className="mt-1">

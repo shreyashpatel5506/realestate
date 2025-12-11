@@ -8,7 +8,7 @@ export async function POST(req) {
         await connectMongo()
 
         // Get Body
-        const { visitDate, status } = await req.json()
+        const { VisitDate, status } = await req.json()
 
         // Get User ID from middleware
         const userId = req.headers.get("userId");
@@ -42,7 +42,7 @@ export async function POST(req) {
         }
 
         // Validate body
-        if (!visitDate || !status) {
+        if (!VisitDate || !status) {
             return NextResponse.json(
                 { success: false, message: "Visit date or status missing" },
                 { status: 400 }
@@ -53,7 +53,7 @@ export async function POST(req) {
         const booking = await Booking.create({
             user: userId,
             property: PropertyId,
-            visitDate,
+            VisitDate,
             status
         })
 

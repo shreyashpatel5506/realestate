@@ -10,9 +10,10 @@ export default function BookingPage() {
     const pid = propertyid;
 
     const [property, setProperty] = useState(null);
-    const [visitDate, setVisitDate] = useState("");
+    const [VisitDate, setVisitDate] = useState("");
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState("");
+    const [showModal, setShowModal] = useState(false);
 
     // Fetch property details
     useEffect(() => {
@@ -23,7 +24,14 @@ export default function BookingPage() {
                 });
 
                 const data = await res.json();
-                if (data.success) setProperty(data.property);
+                if (data.success) {
+                    setProperty(data.property);
+
+                    // Open modal automatically if property is sold
+                    if (data.property.status === "sold") {
+                        setShowModal(true);
+                    }
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -34,16 +42,23 @@ export default function BookingPage() {
     // Handle booking form submit
     async function handleSubmit(e) {
         e.preventDefault();
-        setLoading(true);
         setMsg("");
+
+        if (property?.status === "sold") {
+            setShowModal(true); // show modal instead of submitting
+            return;
+        }
+
+        setLoading(true);
 
         try {
             const res = await fetch(`/api/booking/addbooking?pid=${pid}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "userId": localStorage.getItem("userId"),
                 },
-                body: JSON.stringify({ visitDate, status: "pending" }),
+                body: JSON.stringify({ VisitDate, status: "pending" }),
             });
 
             const data = await res.json();
@@ -65,14 +80,37 @@ export default function BookingPage() {
         <div className="w-full bg-gray-50 min-h-screen">
             <Navbar theme="light" />
 
-            <div className="max-w-5xl mx-auto px-6 py-10">
+            {/* SOLD MODAL */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl">
+                        <h2 className="text-2xl font-bold text-red-600 mb-4 text-center">
+                            Property Sold
+                        </h2>
+                        <p className="text-center text-gray-700 mb-6">
+                            This property is already <b>sold</b>.
+                            You cannot book a visit for this listing.
+                        </p>
 
+                        <button
+                            onClick={() => {
+                                setShowModal(false);
+                                window.location.href = "/properties"; // 🔥 Redirect to properties page
+                            }}
+                            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <div className="max-w-5xl mx-auto px-6 py-10">
                 <h1 className="text-3xl font-bold mb-8 text-gray-800">
                     Book a Property Visit
                 </h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-
                     {/* LEFT — PROPERTY DETAILS */}
                     <div className="lg:col-span-2">
                         {property ? (
@@ -96,6 +134,10 @@ export default function BookingPage() {
                                 <p className="mt-3 text-2xl font-bold text-green-600">
                                     ₹ {property.price}
                                 </p>
+
+                                <p className="mt-2 text-red-600 font-semibold">
+                                    Status: {property.status}
+                                </p>
                             </div>
                         ) : (
                             <p className="text-center text-gray-500">Loading property...</p>
@@ -118,9 +160,9 @@ export default function BookingPage() {
 
                             <input
                                 type="date"
-                                value={visitDate}
+                                value={VisitDate}
                                 onChange={(e) => setVisitDate(e.target.value)}
-                                className="w-full border px-3 py-2 rounded-lg mb-6  text-black bg-gray-50 focus:outline-none focus:ring focus:ring-blue-200"
+                                className="w-full border px-3 py-2 rounded-lg mb-6 text-black bg-gray-50 focus:outline-none focus:ring focus:ring-blue-200"
                                 required
                             />
 
