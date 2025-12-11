@@ -1,10 +1,10 @@
-import connectMongo from "@/app/db"
+import connectMongo from "@/app/db";
 import Booking from "@/app/models/Booking";
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
 export async function GET(req) {
     try {
-        await connectMongo()
+        await connectMongo();
 
         const userId = req.headers.get("userId");
 
@@ -15,26 +15,20 @@ export async function GET(req) {
             );
         }
 
-        const Bookingpropertys = await Booking.find({ User: userId }).populate("property")
-
-        if (!Bookingpropertys) {
-            return NextResponse.json({
-                success: false,
-                message: "No booking property is avilable booking property not avilable"
-            }, { status: 400 })
-        }
+        // FIXED FIELD NAME: user  (NOT User)
+        const Bookingpropertys = await Booking.find({ user: userId }).populate("property");
 
         return NextResponse.json({
             success: true,
-            message: " fetch successfully"
-        }, { status: 200 })
+            data: Bookingpropertys,
+            message: "Fetched successfully",
+        }, { status: 200 });
 
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return NextResponse.json({
             success: false,
-            message: "Error wen try to get the booking property"
-        }, { status: 500 })
+            message: "Error when trying to get the booking property"
+        }, { status: 500 });
     }
-
 }

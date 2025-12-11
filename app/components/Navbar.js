@@ -106,7 +106,7 @@ const Navbar = ({ theme = "dark" }) => {
                         Properties
                     </a>
 
-                    <a href="/booking" className="text-lg font-semibold text-[#172023] hover:opacity-70">
+                    <a href="/bookingList" className="text-lg font-semibold text-[#172023] hover:opacity-70">
                         Booking
                     </a>
 
