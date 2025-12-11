@@ -20,7 +20,7 @@ export async function GET(req) {
         if (!Bookingpropertys) {
             return NextResponse.json({
                 success: false,
-                message: "No booking property is avilable"
+                message: "No booking property is avilable booking property not avilable"
             }, { status: 400 })
         }
 
