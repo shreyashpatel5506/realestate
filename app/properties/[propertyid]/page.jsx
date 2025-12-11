@@ -13,6 +13,7 @@ import {
     Heart,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import ImageGallery from "@/app/components/ImageGallery";
 
 export default function PropertyDetailsPage() {
     const { propertyid } = useParams();
@@ -188,32 +189,7 @@ export default function PropertyDetailsPage() {
                 </div>
 
                 {/* GALLERY */}
-                <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
-                    <div className="md:col-span-2">
-                        <img
-                            src={images[0]}
-                            className="w-full h-[420px] object-cover rounded-2xl shadow-md"
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
-                        <img
-                            src={images[1]}
-                            className="w-full h-[200px] object-cover rounded-xl shadow"
-                        />
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <img
-                                src={images[2]}
-                                className="w-full h-[180px] object-cover rounded-xl shadow"
-                            />
-                            <img
-                                src={images[3]}
-                                className="w-full h-[180px] object-cover rounded-xl shadow"
-                            />
-                        </div>
-                    </div>
-                </div>
+                <ImageGallery images={property.images} />
 
                 {/* MAIN CONTENT */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-14">
@@ -251,12 +227,22 @@ export default function PropertyDetailsPage() {
                                 ₹ {property.price.toLocaleString()}
                             </h1>
 
-                            <button
-                                onClick={() => router.push(`/properties/${propertyid}/booking`)}
-                                className="mt-6 w-full bg-[#1B8C66] hover:bg-[#157a58] text-white py-3 rounded-xl text-lg"
-                            >
-                                Book Now
-                            </button>
+                            {localStorage.getItem("userRole") === "user" && (
+                                <button
+                                    onClick={() => router.push(`/properties/${propertyid}/booking`)}
+                                    className="mt-6 w-full bg-[#1B8C66] hover:bg-[#157a58] text-white py-3 rounded-xl text-lg"
+                                >
+                                    Book Now
+                                </button>
+                            )}
+                            {localStorage.getItem("userRole") === "agent" && (
+                                <button
+                                    onClick={() => router.push(`/properties/${propertyid}/updatestatus`)}
+                                    className="mt-4 w-full bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-xl"
+                                >
+                                    Update Status
+                                </button>
+                            )}
                         </div>
 
                         {/* AGENT */}

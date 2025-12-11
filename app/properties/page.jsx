@@ -67,7 +67,11 @@ export default function PropertyPage() {
                         {properties.map((p) => (
                             <Link
                                 key={p._id}
-                                href={`/properties/${p._id}`}
+                                href={
+                                    localStorage.getItem("role") === "agent"
+                                        ? `/properties/${p._id}/updatestatus`
+                                        : `/properties/${p._id}`
+                                }
                                 className="rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200 hover:shadow-2xl transition-all duration-300 group"
                             >
                                 <div className="relative">

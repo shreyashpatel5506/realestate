@@ -26,3 +26,7 @@ body {
   color: var(--foreground);
 
 }
+
+.input {
+  @apply w-full border px-3 py-2 rounded text-black bg-white;
+}

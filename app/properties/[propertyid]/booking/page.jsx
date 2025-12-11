@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "../../../components/Navbar";
 import { Calendar } from "lucide-react";
+import ImageGallery from "@/app/components/ImageGallery";
 
 export default function BookingPage() {
     const { propertyid } = useParams();
@@ -121,11 +122,7 @@ export default function BookingPage() {
 
                                 <p className="text-gray-600 mb-4">{property.location}</p>
 
-                                <img
-                                    src={property.image || property.images?.[0]}
-                                    alt="property"
-                                    className="w-full h-72 object-cover rounded-xl shadow-sm"
-                                />
+                                <ImageGallery images={property.images} />
 
                                 <p className="mt-4 text-gray-700 leading-relaxed">
                                     {property.description}
