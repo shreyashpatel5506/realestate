@@ -117,15 +117,15 @@ const Navbar = ({ theme = "dark" }) => {
                         <>
                             <div className="border-b my-2"></div>
 
-                            <a href="/agent/addproperty" className="text-lg font-semibold text-blue-700 hover:opacity-70">
+                            <a href="/addProperty" className="text-lg font-semibold text-blue-700 hover:opacity-70">
                                 ➕ Add Property
                             </a>
 
-                            <a href="/agent/updateproperty" className="text-lg font-semibold text-blue-700 hover:opacity-70">
+                            <a href="/updateproperty" className="text-lg font-semibold text-blue-700 hover:opacity-70">
                                 ✏️ Update Property
                             </a>
 
-                            <a href="/agent/bookinglist" className="text-lg font-semibold text-blue-700 hover:opacity-70">
+                            <a href="/bookinglist" className="text-lg font-semibold text-blue-700 hover:opacity-70">
                                 📄 Booking List
                             </a>
                         </>
