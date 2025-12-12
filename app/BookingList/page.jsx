@@ -7,6 +7,9 @@ export default function BookingListPage() {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // ================================
+    // Fetch User Bookings
+    // ================================
     useEffect(() => {
         async function fetchBookings() {
             try {
@@ -19,7 +22,6 @@ export default function BookingListPage() {
 
                 const data = await res.json();
 
-                // API returns: { success: true, data: [] }
                 setBookings(Array.isArray(data.data) ? data.data : []);
 
             } catch (error) {
@@ -32,6 +34,34 @@ export default function BookingListPage() {
 
         fetchBookings();
     }, []);
+
+    // ================================
+    // Delete Booking
+    // ================================
+    const deleteBooking = async (id) => {
+        if (!confirm("Are you sure you want to cancel this booking?")) return;
+
+        try {
+            const res = await fetch(`/api/booking/delete?bid=${id}`, {
+                method: "DELETE",
+                headers: {
+                    "userId": localStorage.getItem("userId"),
+                }
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                // Remove deleted booking from UI
+                setBookings((prev) => prev.filter((b) => b._id !== id));
+            } else {
+                alert("Failed to delete booking");
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div className="w-full bg-gray-50 min-h-screen">
@@ -54,8 +84,16 @@ export default function BookingListPage() {
                     {Array.isArray(bookings) && bookings.map((item) => (
                         <div
                             key={item._id}
-                            className="bg-white rounded-2xl shadow-md border p-4 hover:shadow-lg transition"
+                            className="bg-white rounded-2xl shadow-md border p-4 hover:shadow-lg transition relative"
                         >
+                            {/* Delete Button */}
+                            <button
+                                onClick={() => deleteBooking(item._id)}
+                                className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-sm hover:bg-red-700"
+                            >
+                                Cancel
+                            </button>
+
                             <img
                                 src={item.property?.image || item.property?.images?.[0]}
                                 className="w-full h-52 object-cover rounded-xl"
@@ -73,8 +111,9 @@ export default function BookingListPage() {
                             <div className="mt-3 text-gray-700">
                                 <p>
                                     <span className="font-semibold">Visit Date: </span>
-                                    {item.VisitDate ? new Date(item.VisitDate).toISOString().split("T")[0] : "N/A"}
-
+                                    {item.VisitDate
+                                        ? new Date(item.VisitDate).toISOString().split("T")[0]
+                                        : "N/A"}
                                 </p>
 
                                 <p className="mt-1">
@@ -83,7 +122,9 @@ export default function BookingListPage() {
                                         className={
                                             item.status === "pending"
                                                 ? "text-orange-600 font-semibold"
-                                                : "text-green-600 font-semibold"
+                                                : item.status === "cancel"
+                                                    ? "text-red-600 font-semibold"
+                                                    : "text-green-600 font-semibold"
                                         }
                                     >
                                         {item.status}
