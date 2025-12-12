@@ -15,8 +15,9 @@ export async function GET(req) {
             );
         }
 
-        const properties = await Property.find({ agentId: tokenAgentId })
-            .populate("agentId", "name phone");
+        // FIXED: query the correct field "Agent"
+        const properties = await Property.find({ Agent: tokenAgentId })
+            .populate("Agent", "name phone");  // FIXED populate field
 
         return NextResponse.json(
             { success: true, properties },
