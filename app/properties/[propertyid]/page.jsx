@@ -32,9 +32,7 @@ export default function PropertyDetailsPage() {
         "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80",
     ];
 
-    // --------------------------------------------------------
-    // ⭐ FETCH PROPERTY DETAILS
-    // --------------------------------------------------------
+
     const getProperty = async () => {
         try {
             const res = await fetch(
@@ -54,9 +52,6 @@ export default function PropertyDetailsPage() {
         }
     };
 
-    // --------------------------------------------------------
-    // ❤️ CHECK IF PROPERTY IS IN FAVOURITES
-    // --------------------------------------------------------
     const checkFavourite = async () => {
         try {
             const res = await fetch("/api/favourite/getFavourite", {
@@ -85,9 +80,6 @@ export default function PropertyDetailsPage() {
         checkFavourite(); // ⭐ VERY IMPORTANT
     }, [propertyid]);
 
-    // --------------------------------------------------------
-    // ❤️ TOGGLE FAVOURITE BUTTON
-    // --------------------------------------------------------
     const toggleFavourite = async () => {
         try {
             if (isFavourite) {
