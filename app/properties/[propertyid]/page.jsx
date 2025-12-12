@@ -219,22 +219,13 @@ export default function PropertyDetailsPage() {
                                 ₹ {property.price.toLocaleString()}
                             </h1>
 
-                            {localStorage.getItem("userRole") === "user" && (
-                                <button
-                                    onClick={() => router.push(`/properties/${propertyid}/booking`)}
-                                    className="mt-6 w-full bg-[#1B8C66] hover:bg-[#157a58] text-white py-3 rounded-xl text-lg"
-                                >
-                                    Book Now
-                                </button>
-                            )}
-                            {localStorage.getItem("userRole") === "agent" && (
-                                <button
-                                    onClick={() => router.push(`/properties/${propertyid}/updatestatus`)}
-                                    className="mt-4 w-full bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-xl"
-                                >
-                                    Update Status
-                                </button>
-                            )}
+                            <button
+                                onClick={() => router.push(`/properties/${propertyid}/booking`)}
+                                className="mt-6 w-full bg-[#1B8C66] hover:bg-[#157a58] text-white py-3 rounded-xl text-lg"
+                            >
+                                Book Now
+                            </button>
+
                         </div>
 
                         {/* AGENT */}

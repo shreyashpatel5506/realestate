@@ -1,28 +1,30 @@
 "use client";
 import React, { useState, useEffect } from "react";
+
 import { PhoneCall, HouseHeart, Menu, X } from "lucide-react";
+import Link from "next/link";
 
 const Navbar = ({ theme = "dark" }) => {
     const [open, setOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState(null);
 
-    // COLORS BASED ON THEME
-    const textColor = theme === "dark" ? "text-white" : "text-[#172023]";
-    const iconColor = theme === "dark" ? "text-white" : "text-[#172023]";
-    const menuBtnBg = theme === "dark" ? "bg-white" : "bg-[#172023]";
-    const menuBtnTextColor = theme === "dark" ? "text-[#172023]" : "text-white";
 
     useEffect(() => {
         if (typeof window !== "undefined") {
             const token = localStorage.getItem("token");
-            const userRole = localStorage.getItem("userRole"); // 👈 ROLE HERE
+            const userRole = localStorage.getItem("userRole");
 
             setIsLoggedIn(Boolean(token));
             setRole(userRole); // sets "agent" or "user"
         }
     }, []);
 
+    // COLORS BASED ON THEME
+    const textColor = theme === "dark" ? "text-white" : "text-[#172023]";
+    const iconColor = theme === "dark" ? "text-white" : "text-[#172023]";
+    const menuBtnBg = theme === "dark" ? "bg-white" : "bg-[#172023]";
+    const menuBtnTextColor = theme === "dark" ? "text-[#172023]" : "text-white";
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
@@ -47,7 +49,6 @@ const Navbar = ({ theme = "dark" }) => {
                             Homely
                         </h1>
                     </div>
-
                     {/* Right Section */}
                     <div className="flex items-center gap-6">
 
@@ -102,45 +103,42 @@ const Navbar = ({ theme = "dark" }) => {
                 {/* MENU ITEMS */}
                 <div className="flex flex-col gap-6 p-6">
 
-                    <a href="/properties" className="text-lg font-semibold text-[#172023] hover:opacity-70">
+                    <Link href="/properties" className="text-lg font-semibold text-[#172023] hover:opacity-70">
                         Properties
-                    </a>
+                    </Link>
 
-                    <a href="/bookingList" className="text-lg font-semibold text-[#172023] hover:opacity-70">
+                    <Link href="/bookingList" className="text-lg font-semibold text-[#172023] hover:opacity-70">
                         Booking
-                    </a>
+                    </Link>
 
-                    {/* ------------------------------------- */}
-                    {/* AGENT-ONLY MENU OPTIONS */}
-                    {/* ------------------------------------- */}
                     {role === "agent" && (
                         <>
                             <div className="border-b my-2"></div>
 
-                            <a href="/addProperty" className="text-lg font-semibold text-blue-700 hover:opacity-70">
-                                ➕ Add Property
-                            </a>
+                            <Link href="/addProperty" className="text-lg font-semibold text-blue-700 hover:opacity-70">
+                                Add Property
+                            </Link>
 
-                            <a href="/updateproperty" className="text-lg font-semibold text-blue-700 hover:opacity-70">
-                                ✏️ Update Property
-                            </a>
+                            <Link href="/myProperties" className="text-lg font-semibold text-blue-700 hover:opacity-70">
+                                my Property
+                            </Link>
 
-                            <a href="/bookinglist" className="text-lg font-semibold text-blue-700 hover:opacity-70">
-                                📄 Booking List
-                            </a>
+                            <Link href="/bookinglist" className="text-lg font-semibold text-blue-700 hover:opacity-70">
+                                Booking List
+                            </Link>
                         </>
                     )}
 
                     {/* AUTH BUTTONS */}
                     {!isLoggedIn ? (
                         <>
-                            <a href="/login" className="text-lg font-semibold text-[#172023] hover:opacity-70">
+                            <Link href="/login" className="text-lg font-semibold text-[#172023] hover:opacity-70">
                                 Login
-                            </a>
+                            </Link>
 
-                            <a href="/signup" className="text-lg font-semibold text-[#172023] hover:opacity-70">
+                            <Link href="/signup" className="text-lg font-semibold text-[#172023] hover:opacity-70">
                                 Signup
-                            </a>
+                            </Link>
                         </>
                     ) : (
                         <button
