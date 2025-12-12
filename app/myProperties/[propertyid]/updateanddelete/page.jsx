@@ -38,7 +38,7 @@ export default function UpdateDeletePage() {
         e.preventDefault();
         setLoading(true);
 
-        const res = await fetch(`/api/property/updateproperty?pid=${propertyid}`, {
+        const res = await fetch(`/api/property/updatepropertysatus?pid=${propertyid}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -62,7 +62,7 @@ export default function UpdateDeletePage() {
     async function deleteHandler() {
         if (!confirm("Are you sure?")) return;
 
-        const res = await fetch(`/api/property/deleteproperty?pid=${propertyid}`, {
+        const res = await fetch(`/api/property/deleteProperty?pid=${propertyid}`, {
             method: "DELETE",
             headers: {
                 "userId": localStorage.getItem("userId"),

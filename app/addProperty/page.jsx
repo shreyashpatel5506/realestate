@@ -2,10 +2,13 @@
 
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
+import Image from "next/image";
 
 export default function AddPropertyPage() {
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState("");
+    const [imagePreviews, setImagePreviews] = useState([]);
+
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -15,7 +18,7 @@ export default function AddPropertyPage() {
         const formData = new FormData(e.target);
 
         try {
-            const res = await fetch("/api/property/addproperty", {
+            const res = await fetch("/api/property/createProperty", {
                 method: "POST",
                 headers: {
                     "userId": localStorage.getItem("userId"), // REQUIRED
@@ -40,6 +43,18 @@ export default function AddPropertyPage() {
             setMsg("❌ Server error!");
         }
     }
+
+    const handleImagePreview = (e) => {
+        const files = Array.from(e.target.files);
+
+        const previews = files.map((file) => ({
+            file,
+            url: URL.createObjectURL(file)
+        }));
+
+        setImagePreviews(previews);
+    };
+
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -107,10 +122,10 @@ export default function AddPropertyPage() {
                         required
                         className="w-full border px-3 py-2 rounded mb-4 text-black"
                     >
-                        <option>Flat</option>
-                        <option>House</option>
-                        <option>Villa</option>
-                        <option>Land</option>
+                        <option>apartment</option>
+                        <option>house</option>
+                        <option>shop</option>
+                        <option>land</option>
                     </select>
 
                     {/* CATEGORY */}
@@ -122,8 +137,8 @@ export default function AddPropertyPage() {
                         required
                         className="w-full border px-3 py-2 rounded mb-4 text-black"
                     >
-                        <option>Rent</option>
-                        <option>Sale</option>
+                        <option>rent</option>
+                        <option>sale</option>
                     </select>
 
                     {/* ADDRESS */}
@@ -201,22 +216,40 @@ export default function AddPropertyPage() {
                         required
                         className="w-full border px-3 py-2 rounded mb-4 text-black"
                     >
-                        <option value="available">Available</option>
-                        <option value="sold">Sold</option>
+                        <option value="available">available</option>
                     </select>
 
                     {/* IMAGES */}
                     <label className="block mb-2 font-medium text-gray-700">
                         Upload Images
                     </label>
+
                     <input
                         type="file"
                         name="images"
                         accept="image/*"
                         multiple
                         required
-                        className="w-full border px-3 py-2 rounded mb-6 bg-white"
+                        onChange={handleImagePreview}
+                        className="w-full border px-3 py-2 rounded mb-6 bg-white text-black"
                     />
+
+                    {/* IMAGE PREVIEW GRID */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3 text-black">
+                        {imagePreviews.length > 0 &&
+                            imagePreviews.map((img, index) => (
+                                <div key={index} className="relative w-full h-32 border rounded overflow-hidden">
+                                    <Image
+                                        src={img.url}
+                                        alt="Preview"
+                                        width={300}
+
+                                        height={200}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            ))}
+                    </div>
 
                     <button
                         disabled={loading}

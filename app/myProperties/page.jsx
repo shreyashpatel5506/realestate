@@ -17,7 +17,7 @@ export default function MyProperties() {
 
     const getMyProperties = async () => {
         try {
-            const res = await fetch(`/api/property/getAgentProperties?agentId=${agentId}`, {
+            const res = await fetch(`/api/property/myproperties?agentId=${agentId}`, {
                 method: "GET",
                 cache: "no-store",
             });
