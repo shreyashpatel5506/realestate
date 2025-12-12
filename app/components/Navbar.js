@@ -14,9 +14,10 @@ const Navbar = ({ theme = "dark" }) => {
         if (typeof window !== "undefined") {
             const token = localStorage.getItem("token");
             const userRole = localStorage.getItem("userRole");
-
-            setIsLoggedIn(Boolean(token));
-            setRole(userRole); // sets "agent" or "user"
+            queueMicrotask(() => {
+                setIsLoggedIn(!!token);
+                setRole(userRole); // sets "agent" or "user"
+            })
         }
     }, []);
 
