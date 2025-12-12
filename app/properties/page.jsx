@@ -74,9 +74,7 @@ export default function PropertyPage() {
                                 <div className="relative">
 
                                     {/* HEART ICON (future favourite toggle) */}
-                                    <button className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow group-hover:scale-110 transition">
-                                        <Heart size={20} className="text-gray-600" />
-                                    </button>
+
 
                                     <img
                                         src={p.images?.[0] || fallbackImage}
