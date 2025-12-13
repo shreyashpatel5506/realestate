@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react'
 import Image from 'next/image'
 import background from '../public/backgroundimageHome.png'
@@ -74,7 +76,7 @@ const Page = () => {
                         <div className="flex flex-wrap gap-4 pt-6">
 
                             <button className="px-6 py-3 sm:px-8 sm:py-4 bg-white rounded-full font-bricolage font-semibold text-[clamp(0.9rem,2vw,1rem)] text-[#172023] hover:bg-gray-100 transition"
-                            
+                                onClick={() => window.location.href = '/properties'}
                             >
                                 Get in touch
                             </button>

@@ -43,7 +43,7 @@ const Navbar = ({ theme = "dark" }) => {
                     {/* Logo */}
                     <div
                         className="flex items-center gap-3 cursor-pointer"
-                        onClick={() => window.location.href = '/home'}
+                        onClick={() => window.location.href = '/'}
                     >
                         <HouseHeart className={`${iconColor}`} />
                         <h1 className={`${textColor} text-2xl font-semibold font-bricolage`}>
