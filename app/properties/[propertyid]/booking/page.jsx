@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
@@ -158,13 +158,12 @@ export default function BookingPage() {
                     <div className="lg:col-span-2">
                         {property ? (
                             <div className="bg-white rounded-2xl shadow-md p-6 border">
-                                <h2 className="text-2xl font-bold mb-2">
+                                <h2 className="text-2xl text-black font-bold mb-2">
                                     {property.title}
                                 </h2>
-                                <p className="text-gray-600 mb-4">
-                                    {property.location}
-                                </p>
-
+                        <p className="text-gray-600 text-lg mt-1">
+                    {property.city}, {property.state}
+                </p>
                                 <ImageGallery images={property.images} />
 
                                 <p className="mt-4 text-gray-700">
