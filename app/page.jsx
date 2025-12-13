@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "./components/Navbar";
 import {
   Home,
@@ -60,11 +61,17 @@ const REVIEWS = [
 
 export default function HomePage() {
   const [active, setActive] = useState(0);
+  const [animate, setAnimate] = useState(true);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActive((prev) => (prev + 1) % REVIEWS.length);
+      setAnimate(false);
+      setTimeout(() => {
+        setActive((prev) => (prev + 1) % REVIEWS.length);
+        setAnimate(true);
+      }, 200);
     }, 4000);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -73,7 +80,9 @@ export default function HomePage() {
 
       {/* ================= HERO ================= */}
       <section className="relative h-[90vh] min-h-[700px] overflow-hidden">
-        <Navbar />
+         <div className="relative z-20">
+                    <Navbar />
+                </div>
 
         <Image
           src={backgroundImage}
@@ -87,13 +96,20 @@ export default function HomePage() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
           <div className="max-w-xl text-white space-y-6">
             <p className="text-sm tracking-wide">Palm Springs, CA</p>
+
             <h1 className="text-5xl md:text-6xl font-semibold leading-tight">
               Futuristic <br /> Haven
             </h1>
+
             <div className="flex gap-4">
-              <button className="px-6 py-3 bg-white text-black rounded-full font-medium">
+              {/* ✅ ROUTE FIX */}
+              <Link
+                href="/properties"
+                className="px-6 py-3 bg-white text-black rounded-full font-medium hover:scale-105 transition"
+              >
                 Get in touch
-              </button>
+              </Link>
+
               <button className="px-6 py-3 border border-white rounded-full">
                 View details
               </button>
@@ -114,26 +130,36 @@ export default function HomePage() {
       {/* ================= EXPLORE ================= */}
       <PropertyHome />
 
-      {/* ================= REVIEWS / RATINGS CAROUSEL ================= */}
+      {/* ================= GOOGLE STYLE RATINGS ================= */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 text-center">
 
-          <p className="text-green-600 font-medium mb-3">Trusted by clients</p>
-          <h2 className="text-4xl font-semibold mb-12">
-            Rated highly for our approach
+          <p className="text-green-600 font-medium mb-3">
+            Google verified reviews
+          </p>
+
+          <h2 className="text-4xl font-semibold mb-6">
+            4.8 / 5 Customer Rating
           </h2>
 
-          {/* Review Card */}
-          <div className="bg-white rounded-2xl p-10 shadow-md transition-all">
-            <div className="flex justify-center mb-4">
-              {[...Array(REVIEWS[active].rating)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-5 h-5 text-yellow-400 fill-yellow-400"
-                />
-              ))}
-            </div>
+          {/* Google look */}
+          <div className="flex justify-center items-center gap-2 mb-10">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star
+                key={i}
+                className="w-6 h-6 text-yellow-400 fill-yellow-400"
+              />
+            ))}
+            <span className="text-gray-500 text-sm ml-2">
+              Based on 120+ reviews
+            </span>
+          </div>
 
+          {/* Review Card */}
+          <div
+            className={`bg-white rounded-2xl p-10 shadow-md transition-all duration-500
+            ${animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          >
             <p className="text-gray-600 text-lg mb-6 leading-relaxed">
               “{REVIEWS[active].text}”
             </p>
@@ -164,9 +190,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-green-600 font-medium mb-3">Why choose us</p>
+
             <h2 className="text-4xl font-semibold mb-6">
               Designed for comfort,<br />built on trust.
             </h2>
+
             <p className="text-gray-500 mb-10 max-w-lg">
               We focus on clarity, quality and long-term value — not just listings.
             </p>
@@ -194,7 +222,7 @@ export default function HomePage() {
   );
 }
 
-/* ---------------- SMALL COMPONENTS ---------------- */
+/* ---------------- SMALL COMPONENT ---------------- */
 
 const ValueItem = ({ title, desc }) => (
   <div className="border rounded-xl p-5 hover:shadow-md transition">
