@@ -1,9 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
-import background from '../../public/backgroundimageHome.png'
-import Navbar from '../components/Navbar'
+import background from '../public/backgroundimageHome.png'
+import Navbar from './components/Navbar'
 import { Home, Key, Tag, CalendarCheck } from 'lucide-react'
-import PropertyHome from '../components/propertyHome'
+import PropertyHome from './components/propertyHome'
 
 // Service Card (Icon + Title)
 const ServiceCardItem = ({ Icon, title, isFloating }) => (
@@ -73,7 +73,9 @@ const Page = () => {
                         {/* BUTTONS */}
                         <div className="flex flex-wrap gap-4 pt-6">
 
-                            <button className="px-6 py-3 sm:px-8 sm:py-4 bg-white rounded-full font-bricolage font-semibold text-[clamp(0.9rem,2vw,1rem)] text-[#172023] hover:bg-gray-100 transition">
+                            <button className="px-6 py-3 sm:px-8 sm:py-4 bg-white rounded-full font-bricolage font-semibold text-[clamp(0.9rem,2vw,1rem)] text-[#172023] hover:bg-gray-100 transition"
+                            
+                            >
                                 Get in touch
                             </button>
 
