@@ -184,7 +184,7 @@ export default function BookingPage() {
                     </div>
 
                     {/* BOOKING FORM */}
-                    <div>
+                    <div className="text-black">
                         <form
                             onSubmit={handleSubmit}
                             className="bg-white rounded-2xl shadow-xl p-6 border sticky top-24"
