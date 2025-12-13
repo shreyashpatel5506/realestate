@@ -42,7 +42,7 @@ export async function PUT(req) {
         }
 
         // Check if logged in user owns the property
-        if (property.agentId.toString() !== tokenAgentId.toString()) {
+        if (property.Agent.toString() !== tokenAgentId.toString()) {
             return NextResponse.json(
                 { success: false, message: "Forbidden: You cannot update this property" },
                 { status: 403 }

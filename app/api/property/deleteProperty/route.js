@@ -33,7 +33,7 @@ export async function DELETE(req) {
         }
 
         // Check ownership
-        if (property.agentId.toString() !== tokenAgentId.toString()) {
+        if (property.Agent.toString() !== tokenAgentId.toString()) {
             return NextResponse.json(
                 { success: false, message: "Forbidden: You are not the owner" },
                 { status: 403 }
