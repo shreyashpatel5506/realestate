@@ -1,135 +1,204 @@
 "use client";
 
-import React from 'react'
-import Image from 'next/image'
-import background from '../public/backgroundimageHome.png'
-import Navbar from './components/Navbar'
-import { Home, Key, Tag, CalendarCheck } from 'lucide-react'
-import PropertyHome from './components/propertyHome'
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Navbar from "./components/Navbar";
+import {
+  Home,
+  Key,
+  Tag,
+  CalendarCheck,
+  Star,
+} from "lucide-react";
+import backgroundImage from "../public/backgroundimageHome.png";
+import PropertyHome from "./components/propertyHome";
 
-// Service Card (Icon + Title)
-const ServiceCardItem = ({ Icon, title, isFloating }) => (
-    <div className="flex flex-col items-center text-center p-2 sm:p-4">
-        <Icon
-            className={`
-                mb-3
-                w-[clamp(2rem,4vw,3rem)]
-                h-[clamp(2rem,4vw,3rem)]
-                ${isFloating ? 'text-[#020202]' : 'text-white'}
-            `}
-        />
-        <h3
-            className={`
-                font-semibold font-sans
-                text-[clamp(0.8rem,2vw,1.2rem)]
-                ${isFloating ? 'text-gray-800' : 'text-white'}
-            `}
-        >
-            {title}
-        </h3>
-    </div>
+/* ---------------- SERVICES ---------------- */
+
+const ServiceCardItem = ({ Icon, title }) => (
+  <div className="flex flex-col items-center text-center p-4">
+    <Icon className="mb-3 w-10 h-10 text-black" />
+    <h3 className="font-semibold text-gray-800">{title}</h3>
+  </div>
 );
 
 const SERVICES = [
-    { Icon: Home, title: "Buy a Home" },
-    { Icon: Key, title: "Rent a Place" },
-    { Icon: Tag, title: "List Your Property" },
-    { Icon: CalendarCheck, title: "Schedule a Visit" }
+  { Icon: Home, title: "Buy a Home" },
+  { Icon: Key, title: "Rent a Place" },
+  { Icon: Tag, title: "List Your Property" },
+  { Icon: CalendarCheck, title: "Schedule a Visit" },
 ];
 
-const Page = () => {
-    return (
-        <div className="w-full m-0 p-0 bg-white">
+/* ---------------- REVIEWS DATA ---------------- */
 
-            {/* HERO SECTION */}
-            <div className="relative w-full h-[541px] md:h-[868px] overflow-hidden">
+const REVIEWS = [
+  {
+    name: "Amit Sharma",
+    role: "Home Buyer",
+    text: "The entire process felt effortless. Everything was transparent and professionally handled.",
+    rating: 5,
+  },
+  {
+    name: "Neha Verma",
+    role: "Investor",
+    text: "Very refined experience. The team understands quality and long-term value.",
+    rating: 5,
+  },
+  {
+    name: "Rohit Mehta",
+    role: "First-time Buyer",
+    text: "I felt guided at every step. No pressure, just honest advice.",
+    rating: 4,
+  },
+  {
+    name: "Pooja Patel",
+    role: "Property Owner",
+    text: "Listing my property here was smooth and stress-free.",
+    rating: 5,
+  },
+];
 
-                {/* Navbar */}
-                <div className="relative z-20">
-                    <Navbar />
-                </div>
+export default function HomePage() {
+  const [active, setActive] = useState(0);
 
-                {/* Background Image */}
-                <Image
-                    src={background}
-                    alt="Background"
-                    fill
-                    className="object-cover"
-                    priority
-                />
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActive((prev) => (prev + 1) % REVIEWS.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
-                {/* HERO TEXT */}
-                <div className="absolute inset-0 z-10 flex justify-start items-center p-4 sm:p-8 md:p-12 lg:p-24">
-                    <div className="max-w-xl text-white font-sans flex flex-col gap-6">
+  return (
+    <div className="w-full bg-white font-bricolage text-gray-900">
 
-                        {/* City Name */}
-                        <div className="text-[clamp(0.9rem,2.5vw,1.4rem)] font-medium leading-relaxed font-bricolage" >
-                            Palm springs, CA
-                        </div>
+      {/* ================= HERO ================= */}
+      <section className="relative h-[90vh] min-h-[700px] overflow-hidden">
+        <Navbar />
 
-                        {/* MAIN HEADING */}
-                        <h1 className="font-semibold  font-bricolage leading-none text-[clamp(2.5rem,8vw,6rem)]">
-                            Futuristic <br /> Haven
-                        </h1>
+        <Image
+          src={backgroundImage}
+          alt="Hero"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/10" />
 
-                        {/* BUTTONS */}
-                        <div className="flex flex-wrap gap-4 pt-6">
-
-                            <button className="px-6 py-3 sm:px-8 sm:py-4 bg-white rounded-full font-bricolage font-semibold text-[clamp(0.9rem,2vw,1rem)] text-[#172023] hover:bg-gray-100 transition"
-                                onClick={() => window.location.href = '/properties'}
-                            >
-                                Get in touch
-                            </button>
-
-                            <button className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border border-white font-bricolage font-semibold text-[clamp(0.9rem,2vw,1rem)] text-white hover:bg-white/10 transition">
-                                View Details
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-
-                {/* FLOATING SERVICES CARD (DESKTOP/TABLET) */}
-                <div className="hidden md:block absolute bottom-8 right-8 z-10 w-auto">
-                    <div className="bg-white/30 backdrop-blur-md p-8 rounded-xl shadow-2xl max-w-xl">
-                        <div className="grid grid-cols-4 gap-6">
-                            {SERVICES.map((service, index) => (
-                                <ServiceCardItem
-                                    key={`floating-${index}`}
-                                    Icon={service.Icon}
-                                    title={service.title}
-                                    isFloating={true}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-            </div> {/* END HERO */}
-
-            <section className="md:hidden w-full mx-auto py-12 px-4 bg-white">
-                <h2 className="text-[clamp(1.5rem,6vw,2.2rem)] font-semibold mb-8 text-center font-sans text-black">
-                    Explore Our Services
-                </h2>
-
-                <div className="grid grid-cols-2 gap-4 sm:gap-8">
-                    {SERVICES.map((service, index) => (
-                        <div
-                            key={`mobile-${index}`}
-                            className="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-sm"
-                        >
-                            <service.Icon className="w-[clamp(2rem,6vw,3rem)] h-[clamp(2rem,6vw,3rem)] text-[#000000] mb-2" />
-                            <h3 className="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold font-sans text-black">
-                                {service.title}
-                            </h3>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            <PropertyHome />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
+          <div className="max-w-xl text-white space-y-6">
+            <p className="text-sm tracking-wide">Palm Springs, CA</p>
+            <h1 className="text-5xl md:text-6xl font-semibold leading-tight">
+              Futuristic <br /> Haven
+            </h1>
+            <div className="flex gap-4">
+              <button className="px-6 py-3 bg-white text-black rounded-full font-medium">
+                Get in touch
+              </button>
+              <button className="px-6 py-3 border border-white rounded-full">
+                View details
+              </button>
+            </div>
+          </div>
         </div>
-    )
+
+        {/* Floating services */}
+        <div className="hidden md:block absolute bottom-8 right-8 bg-white/30 backdrop-blur-md p-8 rounded-xl shadow-xl">
+          <div className="grid grid-cols-4 gap-6">
+            {SERVICES.map((s, i) => (
+              <ServiceCardItem key={i} {...s} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= EXPLORE ================= */}
+      <PropertyHome />
+
+      {/* ================= REVIEWS / RATINGS CAROUSEL ================= */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+
+          <p className="text-green-600 font-medium mb-3">Trusted by clients</p>
+          <h2 className="text-4xl font-semibold mb-12">
+            Rated highly for our approach
+          </h2>
+
+          {/* Review Card */}
+          <div className="bg-white rounded-2xl p-10 shadow-md transition-all">
+            <div className="flex justify-center mb-4">
+              {[...Array(REVIEWS[active].rating)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="w-5 h-5 text-yellow-400 fill-yellow-400"
+                />
+              ))}
+            </div>
+
+            <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+              “{REVIEWS[active].text}”
+            </p>
+
+            <h4 className="font-semibold">{REVIEWS[active].name}</h4>
+            <p className="text-sm text-gray-500">
+              {REVIEWS[active].role}
+            </p>
+          </div>
+
+          {/* Dots */}
+          <div className="flex justify-center gap-3 mt-8">
+            {REVIEWS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`w-3 h-3 rounded-full ${
+                  active === i ? "bg-green-600" : "bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= WHY CHOOSE US ================= */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="text-green-600 font-medium mb-3">Why choose us</p>
+            <h2 className="text-4xl font-semibold mb-6">
+              Designed for comfort,<br />built on trust.
+            </h2>
+            <p className="text-gray-500 mb-10 max-w-lg">
+              We focus on clarity, quality and long-term value — not just listings.
+            </p>
+
+            <div className="grid sm:grid-cols-2 gap-6">
+              <ValueItem title="Verified properties" desc="Quality-checked listings only." />
+              <ValueItem title="Expert guidance" desc="Professional support throughout." />
+              <ValueItem title="Transparent pricing" desc="No hidden surprises." />
+              <ValueItem title="Smooth experience" desc="From search to success." />
+            </div>
+          </div>
+
+          <div className="relative h-[420px] rounded-2xl overflow-hidden">
+            <Image
+              src="/images/property1.png"
+              alt="Lifestyle"
+              fill
+              className="object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
 }
 
-export default Page
+/* ---------------- SMALL COMPONENTS ---------------- */
+
+const ValueItem = ({ title, desc }) => (
+  <div className="border rounded-xl p-5 hover:shadow-md transition">
+    <h4 className="font-semibold mb-2">{title}</h4>
+    <p className="text-sm text-gray-500">{desc}</p>
+  </div>
+);
