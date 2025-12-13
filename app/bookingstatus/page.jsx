@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 import {
     Pencil,
     Trash,
     Calendar,
-    Home,
-    User,
     MapPin,
+    User,
     X
 } from "lucide-react";
 
@@ -23,23 +23,22 @@ export default function AgentBookingsPage() {
             const res = await fetch("/api/booking/getagentbookings", {
                 method: "GET",
                 headers: {
-                    "userId": localStorage.getItem("userId"),
+                    userId: localStorage.getItem("userId"),
                 },
             });
 
             const data = await res.json();
-            setBookings(data.data || []);
-            setLoading(false);
+            setBookings(Array.isArray(data.data) ? data.data : []);
         } catch (err) {
             console.log(err);
         }
+        setLoading(false);
     };
 
     useEffect(() => {
         fetchBookings();
     }, []);
 
- 
     const handleOpenModal = (booking) => {
         setSelectedBooking(booking);
         setNewStatus(booking.status);
@@ -48,17 +47,19 @@ export default function AgentBookingsPage() {
 
     const updateStatus = async () => {
         try {
-            const res = await fetch(`/api/booking/statusbokkingchanged?bid=${selectedBooking._id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "userId": localStorage.getItem("userId"),
-                },
-                body: JSON.stringify({ status: newStatus }),
-            });
+            const res = await fetch(
+                `/api/booking/statusbokkingchanged?bid=${selectedBooking._id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        userId: localStorage.getItem("userId"),
+                    },
+                    body: JSON.stringify({ status: newStatus }),
+                }
+            );
 
             const data = await res.json();
-
             if (data.success) {
                 fetchBookings();
                 setOpenModal(false);
@@ -75,91 +76,104 @@ export default function AgentBookingsPage() {
             const res = await fetch(`/api/booking/deletebooking?bid=${id}`, {
                 method: "DELETE",
                 headers: {
-                    "userId": localStorage.getItem("userId"),
+                    userId: localStorage.getItem("userId"),
                 },
             });
 
             const data = await res.json();
-
-            if (data.success) {
-                fetchBookings();
-            }
+            if (data.success) fetchBookings();
         } catch (error) {
             console.log(error);
         }
     };
 
-    if (loading) return <p className="text-center mt-10">Loading...</p>;
-
     return (
-        <div className="p-6 max-w-5xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">Agent Bookings</h1>
+        <div className="w-full bg-gray-50 min-h-screen">
+            <Navbar theme="light" />
 
-            {bookings.length === 0 ? (
-                <p>No bookings found.</p>
-            ) : (
-                <div className="space-y-4">
+            <div className="max-w-6xl mx-auto px-6 py-10">
+                <h1 className="text-3xl font-bold mb-8 text-gray-800">
+                    Agent Bookings
+                </h1>
+
+                {loading && <p className="text-gray-500">Loading bookings...</p>}
+
+                {!loading && bookings.length === 0 && (
+                    <p className="text-gray-600">No bookings found.</p>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {bookings.map((b) => (
                         <div
                             key={b._id}
-                            className="p-5 rounded-xl shadow-md border bg-white flex justify-between items-center"
+                            className="bg-white rounded-2xl shadow-md border p-4 hover:shadow-lg transition relative"
                         >
-                            <div>
-                                <h2 className="text-xl font-semibold flex items-center gap-2">
-                                    <Home size={18} /> {b.property.title}
-                                </h2>
-
-                                <p className="flex items-center gap-2 text-gray-600 mt-1">
-                                    <MapPin size={16} /> {b.property.address}
-                                </p>
-
-                                <p className="flex items-center gap-2 text-gray-600 mt-1">
-                                    <User size={16} /> {b.user.name}
-                                </p>
-
-                                <p className="flex items-center gap-2 text-gray-600 mt-1">
-                                    <Calendar size={16} />
-                                    {new Date(b.VisitDate).toLocaleDateString()}
-                                </p>
-
-                                <span
-                                    className={`px-3 py-1 rounded-full text-sm font-semibold mt-2 inline-block ${b.status === "pending"
-                                            ? "bg-yellow-100 text-yellow-700"
-                                            : b.status === "booked"
-                                                ? "bg-green-100 text-green-700"
-                                                : "bg-red-100 text-red-700"
-                                        }`}
-                                >
-                                    {b.status}
-                                </span>
-                            </div>
-
-                            <div className="flex gap-3">
+                            {/* Action Buttons */}
+                            <div className="absolute top-3 right-3 flex gap-2">
                                 <button
                                     onClick={() => handleOpenModal(b)}
-                                    className="p-2 bg-blue-600 text-white rounded-lg"
+                                    className="bg-blue-600 text-white p-2 rounded-full"
                                 >
-                                    <Pencil size={18} />
+                                    <Pencil size={16} />
                                 </button>
-
                                 <button
                                     onClick={() => deleteBooking(b._id)}
-                                    className="p-2 bg-red-600 text-white rounded-lg"
+                                    className="bg-red-600 text-white p-2 rounded-full"
                                 >
-                                    <Trash size={18} />
+                                    <Trash size={16} />
                                 </button>
                             </div>
+
+                            {/* Image */}
+                            <img
+                                src={b.property?.images?.[0]}
+                                alt="property"
+                                className="w-full h-48 object-cover rounded-xl"
+                            />
+
+                            {/* Property Info */}
+                            <h2 className="text-xl font-bold mt-4 text-gray-800">
+                                {b.property?.title}
+                            </h2>
+
+                            <p className="text-gray-600 flex items-center gap-2 mt-1">
+                                <MapPin size={16} /> {b.property?.address}
+                            </p>
+
+                            <p className="text-gray-600 flex items-center gap-2 mt-1">
+                                <User size={16} /> {b.user?.name}
+                            </p>
+
+                            <p className="text-gray-600 flex items-center gap-2 mt-1">
+                                <Calendar size={16} />
+                                {new Date(b.VisitDate).toLocaleDateString()}
+                            </p>
+
+                            {/* Status */}
+                            <span
+                                className={`inline-block mt-3 px-3 py-1 rounded-full text-sm font-semibold
+                                    ${b.status === "pending"
+                                        ? "bg-yellow-100 text-yellow-700"
+                                        : b.status === "booked"
+                                            ? "bg-green-100 text-green-700"
+                                            : "bg-red-100 text-red-700"
+                                    }`}
+                            >
+                                {b.status}
+                            </span>
+
+                            <p className="mt-4 text-green-600 font-bold text-lg">
+                                ₹ {b.property?.price}
+                            </p>
                         </div>
                     ))}
                 </div>
-            )}
+            </div>
 
-            {/* ================================
-                Update Status Modal
-            ================================== */}
+            {/* ================= Update Status Modal ================= */}
             {openModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-xl w-96 shadow-xl">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl w-96 shadow-xl text-black">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-semibold">Update Status</h2>
                             <button onClick={() => setOpenModal(false)}>
