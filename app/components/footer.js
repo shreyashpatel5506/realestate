@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Instagram, X } from "lucide-react";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -30,7 +30,7 @@ export default function Footer() {
                     </p>
 
                     <div className="flex gap-4">
-                        <X className="cursor-pointer hover:text-white" />
+                        <Twitter className="cursor-pointer hover:text-white" />
                         <Facebook className="cursor-pointer hover:text-white" />
                         <Instagram className="cursor-pointer hover:text-white" />
                     </div>
@@ -75,7 +75,7 @@ export default function Footer() {
                         <span className="hover:text-white">Terms of service</span>
                         <span  className="hover:text-white">Privacy policy</span>
                     </div>
-                </div> 
+                </div>
             </div>
         </footer>
     );
