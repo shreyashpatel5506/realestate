@@ -7,9 +7,7 @@ export default function BookingListPage() {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // ================================
-    // Fetch User Bookings
-    // ================================
+
     useEffect(() => {
         async function fetchBookings() {
             try {
@@ -35,14 +33,11 @@ export default function BookingListPage() {
         fetchBookings();
     }, []);
 
-    // ================================
-    // Delete Booking
-    // ================================
     const deleteBooking = async (id) => {
         if (!confirm("Are you sure you want to cancel this booking?")) return;
 
         try {
-            const res = await fetch(`/api/booking/delete?bid=${id}`, {
+            const res = await fetch(`/api/booking/deletebooking?bid=${id}`, {
                 method: "DELETE",
                 headers: {
                     "userId": localStorage.getItem("userId"),

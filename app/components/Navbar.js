@@ -124,7 +124,7 @@ const Navbar = ({ theme = "dark" }) => {
                                 my Property
                             </Link>
 
-                            <Link href="/bookinglist" className="text-lg font-semibold text-blue-700 hover:opacity-70">
+                            <Link href="/bookingstatus" className="text-lg font-semibold text-blue-700 hover:opacity-70">
                                 Booking List
                             </Link>
                         </>

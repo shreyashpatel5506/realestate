@@ -18,12 +18,9 @@ export default function AgentBookingsPage() {
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [newStatus, setNewStatus] = useState("");
 
-    // ================================
-    // Fetch Agent Bookings
-    // ================================
     const fetchBookings = async () => {
         try {
-            const res = await fetch("/api/agent/bookings", {
+            const res = await fetch("/api/booking/getagentbookings", {
                 method: "GET",
                 headers: {
                     "userId": localStorage.getItem("userId"),
@@ -42,21 +39,16 @@ export default function AgentBookingsPage() {
         fetchBookings();
     }, []);
 
-    // ================================
-    // Open Update Status Modal
-    // ================================
+ 
     const handleOpenModal = (booking) => {
         setSelectedBooking(booking);
         setNewStatus(booking.status);
         setOpenModal(true);
     };
 
-    // ================================
-    // Update Booking Status
-    // ================================
     const updateStatus = async () => {
         try {
-            const res = await fetch(`/api/agent/bookings?bid=${selectedBooking._id}`, {
+            const res = await fetch(`/api/booking/statusbokkingchanged?bid=${selectedBooking._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -76,14 +68,11 @@ export default function AgentBookingsPage() {
         }
     };
 
-    // ================================
-    // Delete Booking
-    // ================================
     const deleteBooking = async (id) => {
         if (!confirm("Are you sure you want to delete this booking?")) return;
 
         try {
-            const res = await fetch(`/api/agent/bookings?bid=${id}`, {
+            const res = await fetch(`/api/booking/deletebooking?bid=${id}`, {
                 method: "DELETE",
                 headers: {
                     "userId": localStorage.getItem("userId"),
