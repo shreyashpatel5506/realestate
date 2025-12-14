@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 export default function PropertyHome() {
+      const router = useRouter();
     return (
         <div className="w-full bg-white px-4 sm:px-6 md:px-10 lg:px-20 py-14 relative font-sans">
 
@@ -41,7 +42,8 @@ export default function PropertyHome() {
                         to spacious villas, tailored to your needs.
                     </p>
 
-                    <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium font-bricolage mt-4">
+                    <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium font-bricolage mt-4"
+                    onClick={() => router.push("/properties")}>
                         View properties
                     </button>
                 </div>

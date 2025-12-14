@@ -39,7 +39,7 @@ export default function Login() {
 
             toast.success("Login successful!");
 
-            router.push("/home");
+            router.push("/");
 
         } catch (error) {
             toast.error("Something went wrong");

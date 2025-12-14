@@ -85,6 +85,8 @@ export default function Signup() {
             localStorage.setItem("userName", data.user.name);
 
             toast.success("Account created successfully!");
+
+              router.push("/");
         } catch (error) {
             toast.error("Something went wrong");
         }
