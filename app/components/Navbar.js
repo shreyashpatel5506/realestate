@@ -112,6 +112,10 @@ const Navbar = ({ theme = "dark" }) => {
                         Booking
                     </Link>
 
+                    <Link href="/Favourite" className="text-lg font-semibold text-[#172023] hover:opacity-70">
+                        Favourite
+                    </Link>
+
                     {role === "agent" && (
                         <>
                             <div className="border-b my-2"></div>
