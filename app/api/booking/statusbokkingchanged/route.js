@@ -59,7 +59,7 @@ export async function PUT(req) {
             status: newStatus
         }, { new: true })
         // Use the populated checkBooking object for email content, but with the new status
-        checkBooking.status = newStatus; 
+        checkBooking.status = newStatus;
 
         // --- EMAIL LOGIC START ---
         const userEmail = checkBooking.user.email;
