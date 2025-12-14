@@ -32,6 +32,13 @@ export default function PropertyPage() {
         getProperties();
     }, []);
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+        if (typeof window !== 'undefined') {
+            window.location.href = '/login';
+        }
+        return null;
+    }
     return (
         <div className="w-full bg-white relative overflow-hidden">
 
