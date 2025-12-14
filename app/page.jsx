@@ -110,9 +110,9 @@ export default function HomePage() {
                 Get in touch
               </Link>
 
-              <button className="px-6 py-3 border border-white rounded-full">
+              <Link href="/commonrules" className="px-6 py-3 border border-white rounded-full">
                 View details
-              </button>
+              </Link>
             </div>
           </div>
         </div>
