@@ -33,6 +33,13 @@ export default function BookingListPage() {
         fetchBookings();
     }, []);
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+        if (typeof window !== 'undefined') {
+            window.location.href = '/login';
+        }
+        return null;
+    }
     const deleteBooking = async (id) => {
         if (!confirm("Are you sure you want to cancel this booking?")) return;
 
