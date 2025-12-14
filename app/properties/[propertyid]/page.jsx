@@ -16,6 +16,7 @@ import {
     Star,
     X,
 } from "lucide-react";
+import Loading from "@/app/components/Loading";
 
 export default function PropertyDetailsPage() {
     const { propertyid } = useParams();
@@ -145,9 +146,7 @@ export default function PropertyDetailsPage() {
 
     if (loading)
         return (
-            <div className="w-full h-screen flex justify-center items-center text-xl font-semibold">
-                Loading property...
-            </div>
+          <Loading />
         );
 
     if (!property)

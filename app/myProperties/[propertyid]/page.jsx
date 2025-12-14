@@ -11,6 +11,7 @@ import {
     MapPin,
 } from "lucide-react";
 import Link from "next/link";
+import Loading from "@/app/components/Loading";
 
 export default function MyPropertyDetails() {
     const { propertyid } = useParams();
@@ -39,9 +40,7 @@ export default function MyPropertyDetails() {
 
     if (loading)
         return (
-            <div className="w-full text-center py-20 text-xl font-semibold">
-                Loading property...
-            </div>
+            <Loading />
         );
 
     return (

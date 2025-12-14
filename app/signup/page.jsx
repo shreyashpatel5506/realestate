@@ -4,11 +4,15 @@ import Navbar from "../components/Navbar";
 import Image from "next/image";
 import background from "../../public/backgroundimageHome.png";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function Signup() {
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
     const [formData, setFormData] = useState({
         name: "",
         phoneNumber: "",
@@ -17,11 +21,11 @@ export default function Signup() {
         confirmPassword: "",
     });
 
+    // STEP 1: SEND OTP
     const sendOtp = async () => {
-        if (!email.trim()) {
-            toast.error("Please enter your email");
-            return;
-        }
+        if (!email.trim()) return toast.error("Please enter your email");
+
+        setLoading(true);
 
         try {
             const response = await fetch("/api/User/sendOtp", {
@@ -31,17 +35,25 @@ export default function Signup() {
             });
 
             const data = await response.json();
-            if (!data.success) return toast.error(data.message);
+            if (!data.success) {
+                setLoading(false);
+                return toast.error(data.message);
+            }
 
             toast.success("OTP sent successfully!");
             setStep(2);
-        } catch (error) {
+        } catch {
             toast.error("Something went wrong");
+        } finally {
+            setLoading(false);
         }
     };
 
+    // STEP 2: VERIFY OTP
     const verifyOtp = async () => {
         if (!otp.trim()) return toast.error("Please enter OTP");
+
+        setLoading(true);
 
         try {
             const response = await fetch("/api/User/verifyotp", {
@@ -51,15 +63,21 @@ export default function Signup() {
             });
 
             const data = await response.json();
-            if (!data.success) return toast.error(data.message);
+            if (!data.success) {
+                setLoading(false);
+                return toast.error(data.message);
+            }
 
             toast.success("OTP verified!");
             setStep(3);
-        } catch (error) {
+        } catch {
             toast.error("Something went wrong");
+        } finally {
+            setLoading(false);
         }
     };
 
+    // STEP 3: CREATE ACCOUNT
     const createAccount = async () => {
         const { name, phoneNumber, role, password, confirmPassword } = formData;
 
@@ -69,6 +87,8 @@ export default function Signup() {
         if (password !== confirmPassword)
             return toast.error("Passwords do not match");
 
+        setLoading(true);
+
         try {
             const response = await fetch("/api/User/UserCreate", {
                 method: "POST",
@@ -77,7 +97,10 @@ export default function Signup() {
             });
 
             const data = await response.json();
-            if (!data.success) return toast.error(data.message);
+            if (!data.success) {
+                setLoading(false);
+                return toast.error(data.message);
+            }
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.user.id);
@@ -85,10 +108,11 @@ export default function Signup() {
             localStorage.setItem("userName", data.user.name);
 
             toast.success("Account created successfully!");
-
-              router.push("/");
-        } catch (error) {
+            router.push("/");
+        } catch {
             toast.error("Something went wrong");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -118,15 +142,12 @@ export default function Signup() {
                         {[1, 2, 3].map((num) => (
                             <div key={num} className="flex flex-col items-center flex-1">
                                 <div
-                                    className={`w-10 h-10 flex items-center justify-center rounded-full font-bold transition-all
-                                    ${step >= num ? "bg-blue-600 shadow-lg" : "bg-gray-500/40"}`}
+                                    className={`w-10 h-10 flex items-center justify-center rounded-full font-bold
+                                    ${step >= num ? "bg-blue-600" : "bg-gray-500/40"}`}
                                 >
                                     {num}
                                 </div>
-                                <p
-                                    className={`mt-2 text-sm font-semibold ${step >= num ? "text-blue-300" : "text-gray-300"
-                                        }`}
-                                >
+                                <p className="mt-2 text-sm">
                                     {num === 1 && "Send OTP"}
                                     {num === 2 && "Verify OTP"}
                                     {num === 3 && "Details"}
@@ -144,13 +165,22 @@ export default function Signup() {
                                 className="input"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                disabled={loading}
                             />
 
                             <button
                                 onClick={sendOtp}
-                                className="btn-primary"
+                                disabled={loading}
+                                className="btn-primary flex justify-center items-center gap-2"
                             >
-                                Send OTP
+                                {loading ? (
+                                    <>
+                                        <span className="loader"></span>
+                                        Sending OTP...
+                                    </>
+                                ) : (
+                                    "Send OTP"
+                                )}
                             </button>
                         </div>
                     )}
@@ -164,18 +194,28 @@ export default function Signup() {
                                 className="input"
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
+                                disabled={loading}
                             />
 
                             <button
                                 onClick={verifyOtp}
-                                className="btn-primary"
+                                disabled={loading}
+                                className="btn-primary flex justify-center items-center gap-2"
                             >
-                                Verify OTP
+                                {loading ? (
+                                    <>
+                                        <span className="loader"></span>
+                                        Verifying...
+                                    </>
+                                ) : (
+                                    "Verify OTP"
+                                )}
                             </button>
 
                             <button
                                 onClick={() => setStep(1)}
-                                className="text-blue-300 hover:text-blue-400 underline"
+                                className="text-blue-300 underline"
+                                disabled={loading}
                             >
                                 Change Email
                             </button>
@@ -193,6 +233,7 @@ export default function Signup() {
                                 onChange={(e) =>
                                     setFormData({ ...formData, name: e.target.value })
                                 }
+                                disabled={loading}
                             />
 
                             <input
@@ -203,6 +244,7 @@ export default function Signup() {
                                 onChange={(e) =>
                                     setFormData({ ...formData, phoneNumber: e.target.value })
                                 }
+                                disabled={loading}
                             />
 
                             <select
@@ -211,12 +253,12 @@ export default function Signup() {
                                 onChange={(e) =>
                                     setFormData({ ...formData, role: e.target.value })
                                 }
+                                disabled={loading}
                             >
                                 <option value="">Select Role</option>
                                 <option value="user">User</option>
                                 <option value="agent">Agent</option>
                             </select>
-
 
                             <input
                                 type="password"
@@ -226,6 +268,7 @@ export default function Signup() {
                                 onChange={(e) =>
                                     setFormData({ ...formData, password: e.target.value })
                                 }
+                                disabled={loading}
                             />
 
                             <input
@@ -236,19 +279,29 @@ export default function Signup() {
                                 onChange={(e) =>
                                     setFormData({ ...formData, confirmPassword: e.target.value })
                                 }
+                                disabled={loading}
                             />
 
                             <button
                                 onClick={createAccount}
-                                className="btn-success"
+                                disabled={loading}
+                                className="btn-success flex justify-center items-center gap-2"
                             >
-                                Create Account
+                                {loading ? (
+                                    <>
+                                        <span className="loader"></span>
+                                        Creating Account...
+                                    </>
+                                ) : (
+                                    "Create Account"
+                                )}
                             </button>
                         </div>
                     )}
                 </div>
             </div>
 
+            {/* CSS */}
             <style>{`
                 .input {
                     width: 100%;
@@ -256,45 +309,28 @@ export default function Signup() {
                     border-radius: 8px;
                     background: rgba(255,255,255,0.2);
                     border: 1px solid rgba(255,255,255,0.3);
-                    font-weight: 500;
-                    transition: 0.3s;
-                    color: grey;
-                    backdrop-filter: blur(4px);
+                    color: white;
                     outline: none;
                 }
-                .input::placeholder {
-                    color: #e5e5e5;
-                }
-                .btn-primary {
+                .btn-primary, .btn-success {
                     width: 100%;
                     padding: 12px;
-                    background: #2563eb;
-                    border-radius: 8px;
                     font-weight: bold;
                     color: white;
-                    transition: 0.3s;
-                }
-                .btn-primary:hover {
-                    background: #1d4ed8;
-                }
-                .btn-success {
-                    width: 100%;
-                    padding: 12px;
-                    background: #16a34a;
                     border-radius: 8px;
-                    font-weight: bold;
-                    color: white;
-                    transition: 0.3s;
                 }
-                .btn-success:hover {
-                    background: #15803d;
+                .btn-primary { background: #2563eb; }
+                .btn-success { background: #16a34a; }
+                .loader {
+                    width: 18px;
+                    height: 18px;
+                    border: 3px solid rgba(255,255,255,0.3);
+                    border-top: 3px solid white;
+                    border-radius: 50%;
+                    animation: spin 0.8s linear infinite;
                 }
-                .animate-fadeIn {
-                    animation: fadeIn 0.4s ease-in-out;
-                }
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0px); }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
                 }
             `}</style>
         </div>

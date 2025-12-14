@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Link from "next/link";
 import { Heart, Bed, Bath, Square } from "lucide-react";
+import Loading from "../components/Loading";
 
 export default function PropertyPage() {
     const [properties, setProperties] = useState([]);
@@ -62,9 +63,7 @@ export default function PropertyPage() {
             {/* PROPERTY GRID */}
             <div className="w-full px-6 md:px-16 pb-20">
                 {loading ? (
-                    <div className="w-full flex justify-center py-10 text-xl font-semibold">
-                        Loading properties...
-                    </div>
+                    <Loading />
                 ) : properties.length === 0 ? (
                     <p className="text-center text-gray-600">
                         No properties found
