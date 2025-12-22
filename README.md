@@ -1,175 +1,156 @@
-🏡 RealEstate Platform – Full Stack Property Listing Application
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-A modern full-stack real estate web application that allows users to list, browse, and manage properties with secure authentication, role-based access, and cloud media handling.
+</head>
+<body>
 
-This project demonstrates real-world full-stack development, including authentication flows, database modeling, and scalable frontend architecture.
+  <h1>🏡 RealEstate Platform</h1>
+  <p>
+    A modern <strong>full-stack real estate web application</strong> that allows users
+    to list, browse, and manage properties with secure authentication and cloud-based
+    image handling.
+  </p>
 
-🔗 Live Demo
+  <span class="badge">Full Stack</span>
+  <span class="badge">Next.js</span>
+  <span class="badge">Node.js</span>
+  <span class="badge">MongoDB</span>
 
-🌐 (Add deployed link here – Render / Vercel)
+  <section>
+    <h2>🔗 Live Demo</h2>
+    <p>https://homely-sage.vercel.app/</p>
+  </section>
 
-🖼️ Screenshots
-/screenshots
- ├── homepage.png
- ├── property-listing.png
- ├── property-details.png
- ├── dashboard.png
- ├── auth.png
+  <section>
+    <h2>✨ Features</h2>
+    <ul>
+      <li>JWT & OTP based authentication</li>
+      <li>Role-based access (User / Admin)</li>
+      <li>Property listing & management</li>
+      <li>Image uploads using Cloudinary</li>
+      <li>Search and filter functionality</li>
+      <li>Responsive UI</li>
+    </ul>
+  </section>
 
+  <section>
+    <h2>🧠 Tech Stack</h2>
+    <h3>Frontend</h3>
+    <ul>
+      <li>Next.js 16</li>
+      <li>React.js</li>
+      <li>JavaScript</li>
+      <li>Tailwind CSS</li>
+    </ul>
 
-📌 Screenshots significantly increase recruiter interest — add them.
+    <h3>Backend</h3>
+    <ul>
+      <li>Node.js</li>
+      <li>Express.js</li>
+      <li>MongoDB (Mongoose)</li>
+      <li>JWT Authentication</li>
+    </ul>
+  </section>
 
-✨ Features
-
-🔐 Secure Authentication (JWT + OTP)
-
-👤 Role-based Access (User / Admin)
-
-🏠 Property Listing & Management
-
-📸 Image Upload with Cloudinary
-
-🔍 Property Search & Filters
-
-📱 Responsive UI
-
-⚡ Optimized API performance
-
-🧠 Tech Stack
-Frontend
-
-Next.js 16
-
-React.js
-
-JavaScript
-
-Tailwind CSS / CSS Modules
-
-Backend
-
-Node.js
-
-Express.js
-
-MongoDB (Mongoose)
-
-JWT Authentication
-
-Cloud & Tools
-
-Cloudinary (image storage)
-
-Render / Vercel (deployment)
-
-🏗️ System Architecture
+  <section>
+    <h2>🏗️ Architecture</h2>
+    <pre>
 Client (Next.js)
    |
-   |  API Requests
+   | API Requests
    v
 Backend (Node + Express)
    |
-   |  Auth / Data
+   | Data / Auth
    v
 MongoDB
+    </pre>
+  </section>
 
+  <section>
+    <h2>⚙️ Installation & Setup</h2>
 
-Frontend handles UI, routing, and state
-
-Backend manages authentication, business logic, and database
-
-Cloudinary stores property images securely
-
-⚙️ Installation & Setup
-1️⃣ Clone Repository
+    <h3>1. Clone Repository</h3>
+    <pre>
 git clone https://github.com/shreyashpatel5506/realestate.git
 cd realestate
+    </pre>
 
-2️⃣ Install Dependencies
-Backend
+    <h3>2. Install Dependencies</h3>
+    <pre>
 cd backend
 npm install
 
-Frontend
-cd frontend
+cd ../frontend
 npm install
+    </pre>
+  </section>
 
-🔐 Environment Variables
+  <section>
+    <h2>🔐 Environment Variables</h2>
 
-Create .env files:
-
-Backend .env
+    <h3>Backend (.env)</h3>
+    <pre>
 PORT=5000
 MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
 CLOUDINARY_NAME=your_cloudinary_name
 CLOUDINARY_API_KEY=your_key
 CLOUDINARY_API_SECRET=your_secret
+    </pre>
 
-Frontend .env
+    <h3>Frontend (.env)</h3>
+    <pre>
 NEXT_PUBLIC_API_URL=http://localhost:5000
+    </pre>
+  </section>
 
-🚀 Running the Application
-Backend
+  <section>
+    <h2>🚀 Run Project</h2>
+    <pre>
+# Backend
 npm run dev
 
-Frontend
+# Frontend
 npm run dev
+    </pre>
+  </section>
 
-
-Access app:
-
-Frontend → http://localhost:3000
-
-Backend → http://localhost:5000
-
-📁 Folder Structure
+  <section>
+    <h2>📁 Folder Structure</h2>
+    <pre>
 realestate/
 ├── frontend/
-│   ├── app/
-│   ├── components/
-│   └── styles/
 ├── backend/
-│   ├── controllers/
-│   ├── routes/
-│   ├── models/
-│   └── middleware/
-└── README.md
+└── README.html
+    </pre>
+  </section>
 
-🛠️ Future Improvements
+  <section>
+    <h2>🛠️ Future Improvements</h2>
+    <ul>
+      <li>Unit & integration tests</li>
+      <li>Map-based property search</li>
+      <li>Admin analytics dashboard</li>
+      <li>CI/CD with GitHub Actions</li>
+    </ul>
+  </section>
 
-🧪 Unit & integration tests
+  <section>
+    <h2>📄 License</h2>
+    <p>This project is licensed under the <strong>MIT License</strong>.</p>
+  </section>
 
-🗺️ Map-based property search
+  <section>
+    <h2>⭐ Project Note</h2>
+    <p>
+      This is a <strong>serious full-stack portfolio project</strong> created to demonstrate
+      real-world application architecture and best practices.
+    </p>
+  </section>
 
-💬 User-agent chat
-
-📊 Admin analytics dashboard
-
-🔄 CI/CD with GitHub Actions
-
-🤝 Contributing
-
-Contributions are welcome!
-
-Fork the repository
-
-Create a feature branch
-
-Commit changes with clear messages
-
-Open a Pull Request
-
-📄 License
-
-This project is licensed under the MIT License.
-
-⭐ Why This Project Matters
-
-Real-world full-stack use case
-
-Production-style architecture
-
-Scalable and extensible
-
-Strong portfolio signal for React / Full-Stack roles
+</body>
+</html>
