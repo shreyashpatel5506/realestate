@@ -94,7 +94,7 @@ export default function BookingPage() {
                 setSuccessModal(true);
 
                 setTimeout(() => {
-                    window.location.href = "/bookingList";
+                    window.location.href = "/booking";
                 }, 2000);
             }
         } catch (err) {
